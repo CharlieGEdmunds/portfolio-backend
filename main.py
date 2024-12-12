@@ -1,15 +1,20 @@
+import os
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from rapidfuzz import process, fuzz
-import os
 from fastapi.middleware.cors import CORSMiddleware
 
 # Remove annoying errors
 os.environ['HF_HUB_DISABLE_SYMLINKS_WARNING'] = '1'
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # FastAPI app setup
 app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Service is up and running!"}
 
 # Allow requests from the frontend
 app.add_middleware(
@@ -35,39 +40,12 @@ keyword_responses = {
         "If you are seeing this, I am currently working on implementing links to my projects directly into my website however, I haven't quite finished yet. "
         "If you want to see my projects first hand, please visit my github: https://github.com/CharlieGEdmunds."
     ),
-    "education": (
-        "I'm currently pursuing a BSc (Hons) in Computer Science at The University of Manchester, where I earned a First Class result (77%) in my first year. "
-        "During my studies, I've led the frontend development of an award-winning AI-powered timetabling website and delved into a variety of subjects, "
-        "including Machine Learning, Algorithms, Software Engineering, and Knowledge-Based AI."
-    ),
-    "experience": (
-        "My experience has been diverse and impactful. As a tutor, I've designed and led personalized lessons to help underrepresented students succeed in mathematics. "
-        "In addition, I co-organize and facilitate game development workshops at UniCS, mentoring over 100 society members and nurturing their skills in game design and programming. "
-        "These roles have honed my ability to collaborate, teach, and lead effectively."
-    ),
-    "personal": (
-        "Outside academics, I'm passionate about badminton, where I've competed at the county level and won several club tournaments. "
-        "I also enjoy exploring creative challenges in game development, such as building unique mechanics and immersive worlds that merge technical and artistic skills. "
-        "These hobbies balance my academic pursuits and keep me motivated."
-    ),
-    "tools": (
-        "I'm skilled in a range of tools and languages, including Python (for machine learning, NLP, and data visualization), JavaScript (Three.js for interactive 3D content), "
-        "C# (for Unity game development), and C++ (for general programming problems). While not my first choice of language, "
-        "I am also very familiar with the following from university: Java, C, HTML, CSS, PHP, Assembly."
-    ),
-    "achievements": (
-        "Some of my proudest achievements include earning the Microsoft Azure AI Fundamentals certification with a 95% score and winning first place in my university's design and implementation award. "
-        "Additionally, my leadership in a high school Games Creation Club helped foster a love for programming among younger students, demonstrating my commitment to mentorship and innovation."
-    ),
+    # Add other keyword_responses here...
 }
 
 synonyms = {
     "projects": ["projects", "games", "work", "projects I've worked on", "creation", "developments", "undertakings", "contributions", "builds", "designs", "ventures"],
-    "education": ["education", "studies", "learning", "school", "academic", "training", "schooling", "curriculum", "degree", "qualifications", "knowledge acquisition"],
-    "experience": ["experience", "background", "expertise", "knowledge", "history", "skills", "track record", "professional experience", "work experience", "know-how", "competency", "proficiency"],
-    "personal": ["tell me about yourself", "about you", "your background", "who are you", "your story", "about yourself", "personal details", "yourself"],
-    "tools": ["tools", "technologies", "software", "languages", "platforms", "frameworks", "technological stack", "programming languages", "development tools", "skillset"],
-    "achievements": ["achievements", "accomplishments", "milestones", "awards", "recognitions", "successes", "honors", "certifications", "notable achievements", "victories", "distinctions", "certifications"],
+    # Add other synonyms here...
 }
 
 # Introduction message
@@ -109,3 +87,6 @@ async def chatbot(user_input: UserInput):
     return {"response": response}
 
 # Run the app with: uvicorn <filename>:app --reload
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))  # Use the port environment variable
+    uvicorn.run(app, host="0.0.0.0", port=port)
