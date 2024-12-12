@@ -25,7 +25,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-# Define Pydantic model for request body (if needed, but we won't use it in the GET method)
+# Define Pydantic model for request body
 class UserInput(BaseModel):
     user_input: str
 
@@ -80,10 +80,10 @@ def generate_response(user_input):
 
     return "Please re-enter your question."
 
-# FastAPI route for chatbot (changed from POST to GET)
-@app.get("/chatbot/")
-async def chatbot(user_input: str):
-    response = generate_response(user_input)
+# FastAPI route for chatbot (changed back to POST)
+@app.post("/chatbot/")
+async def chatbot(user_input: UserInput):
+    response = generate_response(user_input.user_input)
     return {"response": response}
 
 # Run the app with: uvicorn <filename>:app --reload
