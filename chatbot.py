@@ -19,7 +19,7 @@ def read_root():
 # Allow requests from the frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # You can specify your frontend's origin here
+    allow_origins=["https://charliegedmunds.github.io"],  # You can specify your frontend's origin here
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
     allow_headers=["*"],  # Allow all headers
@@ -134,15 +134,14 @@ def find_response(user_input):
     return (None, None)
 
 def generate_response(user_input):
-    followup_message = "                                              If you want more info about this topic please type 'More details about [topic]'"
+    followup_message = "                                                                                  If you want more info about this topic please type 'More details about [topic]'"
     keyword_response, response_type = find_response(user_input)
-    if keyword_response:
-        if response_type == "normal":
-            return keyword_response + followup_message
-        else:
-            return keyword_response
-
-    return "Please re-enter your question."
+    if keyword_response == None:
+        return "Please re-enter your question."
+    if response_type == "normal":
+        return keyword_response + followup_message
+    else:
+        return keyword_response
 
 # FastAPI route for chatbot (changed back to POST)
 @app.post("/chatbot/")
