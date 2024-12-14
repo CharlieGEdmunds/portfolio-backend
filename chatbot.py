@@ -104,7 +104,7 @@ synonyms = {
 }
 
 # Introduction message
-intro_message = "Hello! Welcome to my chatbot portfolio website. I'm here to assist you with any questions you have. Try asking about topics like 'projects', 'education', 'experience', 'personal details', 'tools', or 'achievements'!"
+intro_message = "Hello! Welcome to my chatbot portfolio website. I'm here to assist you with any questions you have. Try asking about topics like 'projects', 'education', 'experience', 'personal details', 'tools', or 'achievements'! (P.S. There is currently an issue witht the program only sometimes saying please re-enter your response. If met with no response please reword your question and try again)"
 
 @app.get("/chatbot/intro")
 async def chatbot_intro():
